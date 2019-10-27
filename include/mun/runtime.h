@@ -21,6 +21,12 @@ enum MunPrivacy
 typedef uint8_t MunPrivacy;
 #endif // __cplusplus
 
+typedef uintptr_t MunToken;
+
+typedef struct {
+    MunToken _0;
+} MunErrorHandle;
+
 typedef struct {
     void *_0;
 } MunRuntimeHandle;
@@ -60,16 +66,20 @@ typedef struct {
 extern "C" {
 #endif // __cplusplus
 
-uint64_t create_runtime(const char *library_path, MunRuntimeHandle *handle);
+void mun_error_destroy(MunErrorHandle error_handle);
 
-void destroy_runtime(MunRuntimeHandle handle);
+char *mun_error_message(MunErrorHandle error_handle);
 
-uint64_t runtime_get_function_info(MunRuntimeHandle handle,
-                                   const char *fn_name,
-                                   bool *has_fn_info,
-                                   MunFunctionInfo *fn_info);
+MunErrorHandle mun_runtime_create(const char *library_path, MunRuntimeHandle *handle);
 
-uint64_t runtime_update(MunRuntimeHandle handle, bool *updated);
+void mun_runtime_destroy(MunRuntimeHandle handle);
+
+MunErrorHandle mun_runtime_get_function_info(MunRuntimeHandle handle,
+                                             const char *fn_name,
+                                             bool *has_fn_info,
+                                             MunFunctionInfo *fn_info);
+
+MunErrorHandle mun_runtime_update(MunRuntimeHandle handle, bool *updated);
 
 #ifdef __cplusplus
 } // extern "C"
